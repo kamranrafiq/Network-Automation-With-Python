@@ -1,0 +1,34 @@
+Multiple devices output:
+=========================
+
+import getpass
+import sys
+import telnetlib
+
+user= raw_input ("Enter your Username: ")
+password = getpass.getpass()
+
+f = open ("deviceslist.txt")
+
+for line in f:
+    print "Getting configuration for " + (line)
+    host = line.strip()
+    tn = telnetlib.Telnet(host)
+
+    tn.read_until("Username: ")
+    tn.write(user + "\n")
+    if password:
+        tn.read_until("Password: ")
+        tn.write(password + "\n")
+
+    tn.write("terminal length 0\n")
+    tn.write("show ip int brief\n")
+    tn.write("show interface status\n")
+    tn.write("exit\n")
+
+    readoutput = tn.read_all()
+    saveoutput = open("Device" + host, "w")
+    saveoutput.write(readoutput)
+    saveoutput.write("\n")
+    saveoutput.close
+    print tn.read_all()
