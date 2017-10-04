@@ -1,0 +1,42 @@
+
+Multiple devices with txt file:
+================================
+
+import getpass
+import sys
+import telnetlib
+import time
+
+#Getting the user information
+user=raw_input("Enter User name: ")
+password=getpass.getpass()
+
+#open saved file
+iplist=open("deviceslist.txt")
+
+for line in iplist:
+    Host=line.strip("\n")
+    print ("Configuring Switch",Host)
+    tn = telnetlib.Telnet(Host)
+
+    tn.read_until("Username")
+    tn.write(user + "\n")
+
+    if password:
+        tn.read_until("Password")
+        tn.write(password + "\n")
+
+    tn.write("vlan database\n")
+
+    for n in range(100,110):
+        tn.write("vlan " + str(n) + " name vlan_" + str(n) + "\n")
+
+    time.sleep(2)
+
+    tn.write("exit\n")
+    tn.write("wr mem\n")
+    tn.write("exit\n")
+
+    print(tn.read_all())
+    print ("Switch ",Host,"Configured")
+    print("CONFIGURING NEXT DEVICE")
