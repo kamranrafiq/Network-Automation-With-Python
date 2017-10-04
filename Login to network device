@@ -1,0 +1,39 @@
+Login to network device using Telnet in Python script
+
+import getpass
+import sys
+import telnetlib
+
+host= "10.10.10.20"
+user= raw_input ("Enter your username: ")
+password = getpass.getpass()
+
+tn = telnetlib.Telnet(host)
+
+tn.read_until("Username")
+tn.write(user + "\n")
+if password:
+   tn.read_until("Password")
+   tn.write(password + "\n")
+
+tn.write("enable\n")
+tn.write("vpn123\n")
+tn.write("vlan database\n")
+tn.write("vlan 30 name TEST30\n")
+tn.write("vlan 40 name TEST40\n")
+tn.write("vlan 50 name TEST50\n")
+tn.write("exit\n")
+tn.write("conf t\n")
+tn.write("int vlan 30 \n")
+tn.write("ip address 30.1.1.1 255.255.255.0\n")
+tn.write("int vlan 40 \n")
+tn.write("ip address 40.1.1.1 255.255.255.0\n")
+tn.write("int vlan 50 \n")
+tn.write("ip address 50.1.1.1 255.255.255.0\n")
+tn.write("interface fa 1/0\n")
+tn.write("description Testing\n")
+tn.write("ip address 30.30.30.0 255.255.255.0\n")
+tn.write("end\n")
+tn.write("exit\n")
+
+print(tn.read_all())
