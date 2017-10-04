@@ -1,0 +1,43 @@
+Junos PyEZ to create address and address-set:
+==============================================
+
+#!/usr/bin/env python
+import sys
+
+# gather script arguments and build junos commands
+set_name = sys.argv[1]
+addr_prefix = sys.argv[2]
+
+set_cmd = 'set security address-book global address-set ' + set_name + ' address NET_' + addr_prefix 
+addr_cmd = 'set security address-book global address ' + 'NET_' + addr_prefix + ' ' + addr_prefix
+
+print "set_cmd = " + set_cmd
+print "addr_cmd = " + addr_cmd
+
+
+# connect to junos device
+print "Connecting to Junos device"
+from jnpr.junos import Device
+from jnpr.junos.utils.config import Config 
+junos_device = Device(host='192.168.0.1', port='22', user='lab', password='Password1')
+junos_device.open()
+
+#from pprint import pprint as pp
+#pp(junos_device.facts)
+
+# load config module and execute set commands
+cfg = Config(junos_device)
+
+print "Executing: ", set_cmd
+cfg.load(set_cmd, format="set", merge=True)
+
+print "Executing: ", addr_cmd
+cfg.load(addr_cmd, format="set", merge=True)
+
+#show |compare
+print cfg.diff()
+
+#commit comment "xyz"
+cfg.commit(comment="Testing commit using PyEZ")
+
+
