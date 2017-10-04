@@ -1,0 +1,33 @@
+Multiple devices with vlan and device ip range
+===============================================
+
+
+import getpass
+import sys
+import telnetlib
+
+user= raw_input ("Enter your username: ")
+password = getpass.getpass()
+
+for j in range (20, 23):
+    print "Telnet to Host 10.10.10." + str(j)
+    host= "10.10.10." + str (j)
+    tn = telnetlib.Telnet(host)
+
+    tn.read_until("Username")
+    tn.write(user + "\n")
+
+    if password:
+        tn.read_until("Password")
+        tn.write(password + "\n")
+
+    tn.write("vlan database\n")
+
+    for n in range(80,90):
+        tn.write("vlan " + str(n) + " name vlan_" + str(n) + "\n")
+
+    tn.write("exit\n")
+    tn.write("wr mem\n")
+    tn.write("exit\n")
+
+    print(tn.read_all())
