@@ -1,7 +1,6 @@
 Multiple devices with vlan and device ip range
 ===============================================
 
-
 import getpass
 import sys
 import telnetlib
