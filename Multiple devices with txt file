@@ -40,3 +40,4 @@ for line in iplist:
     print(tn.read_all())
     print ("Switch ",Host,"Configured")
     print("CONFIGURING NEXT DEVICE")
+    
