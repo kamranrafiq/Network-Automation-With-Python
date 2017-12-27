@@ -40,4 +40,3 @@ print cfg.diff()
 #commit comment "xyz"
 cfg.commit(comment="Testing commit using PyEZ")
 
-
