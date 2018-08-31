@@ -41,3 +41,4 @@ for line in iplist:
     print ("Switch ",Host,"Configured")
     print("CONFIGURING NEXT DEVICE")
     
+    
